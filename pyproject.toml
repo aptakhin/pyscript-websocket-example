@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pyscript-websocket-example"
+version = "0.1.0"
+description = ""
+authors = ["Alexander Ptakhin <me@aptakhin.name>"]
+readme = "README.md"
+packages = [{include = "pyscript_websocket_example"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+uvicorn = {extras = ["websocket"], version = "^0.19.0"}
+pydantic = "^1.10.2"
+fastapi = {extras = ["websocket"], version = "^0.85.2"}
+websockets = "^10.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

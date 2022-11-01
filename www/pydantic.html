@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>WebSocket</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    </head>
+    <body>
+      <div id="log"></div>
+
+      <script type="text/javascript">
+        function GetWebSocket() { return new WebSocket(...arguments); }
+      </script>
+
+      <py-config>
+        packages = [
+          "pydantic",
+        ]
+
+        paths = [
+            "./models.py"
+        ]
+      </py-config>
+
+      <py-script output="log">
+from datetime import datetime
+from typing import List, Optional
+from pyodide.http import pyfetch
+from js import console, document
+from js import WebSocket, GetWebSocket
+from pyodide.ffi import create_proxy
+from models import User
+import js
+
+
+external_data = {
+    'id': '123',
+    'signup_ts': '2019-06-01 12:22',
+    'friends': [1, 2, '3'],
+}
+user = User(**external_data)
+
+
+class Connection:
+    def __init__(self):
+        self.socket_ = None
+
+    def connect(self):
+        self.socket_ = GetWebSocket("ws://localhost:8000/ws")
+
+        def on_connect(message):
+            print("Connected")
+            self.socket_.send(user.json())
+
+        def on_message(message):
+            print("Get message:", message.data)
+            self.socket_.send(user.json())
+
+        self.socket_.addEventListener("open", create_proxy(on_connect))
+        self.socket_.addEventListener("message", create_proxy(on_message))
+
+    async def loop(self):
+        while True:
+            if self.socket_ is None or self.socket_.readyState == 4:
+                self.connect()
+
+            await asyncio.sleep(1.)
+
+conn = Connection()
+await conn.loop()
+
+</py-script>
+</body>
+</html>
