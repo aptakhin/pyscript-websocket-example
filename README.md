@@ -19,4 +19,4 @@ python3 -m http.server 8001
 
 Now open: http://localhost:8001/www/pydantic.html
 
-![browser screen](docs/browser.png)
+![browser screen](docs/browser.jpg)
