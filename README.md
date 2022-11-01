@@ -9,6 +9,8 @@ For local usage ports `8000` and `8001` are used.
 For server side:
 
 ```bash
+git clone https://github.com/aptakhin/pyscript-websocket-example
+cd pyscript-websocket-example
 poetry install
 poetry run uvicorn www.server:app
 ```
